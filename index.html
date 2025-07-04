@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Popkid Image Uploader</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f0f0f;
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ffcc33;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    button {
+      background: #00ffcc;
+      border: none;
+      color: #0f0f0f;
+      font-weight: bold;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #00cc99;
+      transform: scale(1.05);
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #result img {
+      margin-top: 10px;
+      max-width: 90%;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffcc44;
+    }
+
+    a {
+      color: #00ffcc;
+      word-break: break-all;
+    }
+
+    @media (max-width: 500px) {
+      form {
+        width: 90%;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>🧪 POPKID URL LAB</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required />
+    <button type="submit">🚀 Upload Image</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("uploadForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const res = await fetch("/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.imageUrl) {
+        document.getElementById("result").innerHTML =
+          `<p><strong>✅ Uploaded:</strong> <a href="${data.imageUrl}" target="_blank">${data.imageUrl}</a></p>
+           <img src="${data.imageUrl}" alt="Uploaded Image" />`;
+      } else {
+        document.getElementById("result").innerText = "❌ Upload failed!";
+      }
+    };
+  </script>
+</body>
+</html>
